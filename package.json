@@ -1,0 +1,46 @@
+{
+	"name": "autoclicker",
+	"private": true,
+	"version": "0.0.0",
+	"type": "module",
+	"main": "dist/electron/main/main.js",
+	"scripts": {
+		"vite:dev": "vite",
+		"vite:build": "vue-tsc --noEmit && vite build",
+		"vite:preview": "vite preview",
+		"ts": "tsc",
+		"watch": "tsc -w",
+		"lint": "eslint -c .eslintrc --ext .ts ./src",
+		"app:dev": "tsc && concurrently vite \" electron .\" \"tsc -w\"",
+		"app:build": "npm run vite:build && tsc && electron-builder",
+		"app:preview": "npm run vite:build && tsc && electron ."
+	},
+	"build": {
+		"appId": "com.seal.electron.autoclicker",
+		"asar": true,
+		"directories": {
+			"buildResources": "assets",
+			"output": "release/${version}"
+		},
+		"files": [
+			"dist",
+			"native/index.node"
+		],
+		"win": {
+			"artifactName": "${productName}_${version}.${ext}"
+		}
+	},
+	"dependencies": {
+		"vue": "^3.4.29"
+	},
+	"devDependencies": {
+		"@types/node": "^20.14.10",
+		"@vitejs/plugin-vue": "^5.0.5",
+		"concurrently": "^8.2.2",
+		"electron": "^31.2.0",
+		"electron-builder": "^24.13.3",
+		"typescript": "^5.2.2",
+		"vite": "^5.3.1",
+		"vue-tsc": "^2.0.21"
+	}
+}
