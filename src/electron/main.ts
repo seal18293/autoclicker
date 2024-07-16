@@ -8,7 +8,7 @@ const native: {
 	setButton: (button: number) => void;
 	setInterval: (interval: string) => boolean;
 	setDuration: (duration: string) => boolean;
-} = require("../../../native");
+} = require("../../native");
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const isDev = process.env.npm_lifecycle_event === "app:dev" ? true : false;
@@ -19,7 +19,7 @@ function createWindow() {
 		width: 400,
 		height: 400,
 		webPreferences: {
-			preload: join(__dirname, "../preload/preload.js"),
+			preload: join(__dirname, "preload.js"),
 			webSecurity: true,
 			contextIsolation: true,
 		},
@@ -37,7 +37,7 @@ function createWindow() {
 		mainWindow.loadURL("http://localhost:5173");
 		// mainWindow.webContents.openDevTools(); // Open the DevTools.
 	} else {
-		mainWindow.loadFile(join(__dirname, "../../index.html"));
+		mainWindow.loadFile(join(__dirname, "../index.html"));
 	}
 }
 
@@ -57,23 +57,25 @@ app.on("window-all-closed", () => {
 	app.quit();
 });
 
-ipcMain.on("set-hotkey", (event, hotkey, set) => {
-	console.log(set);
-	if (set) {
-		globalShortcut.register(hotkey, native.toggle);
-	} else {
-		globalShortcut.unregister(hotkey);
+ipcMain.handle("set-hotkey", (event, hotkey, set) => {
+	try {
+		if (set) {
+			return globalShortcut.register(hotkey, () => {
+				native.toggle();
+			});
+		} else {
+			globalShortcut.unregister(hotkey);
+		}
+	} catch (e) {
+		return false;
 	}
+	return true;
 });
 
 ipcMain.on("set-button", (_, button) => {
 	native.setButton(button);
 });
 
-ipcMain.on("set-interval", (event, interval) => {
-	event.reply("set-interval-return", native.setInterval(interval));
-});
+ipcMain.handle("set-interval", (_, interval) => native.setInterval(interval));
 
-ipcMain.on("set-duration", (event, duration) => {
-	event.reply("set-duration-return", native.setDuration(duration));
-});
+ipcMain.handle("set-duration", (_, duration) => native.setDuration(duration));

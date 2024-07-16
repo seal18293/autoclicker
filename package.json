@@ -1,9 +1,9 @@
 {
 	"name": "autoclicker",
 	"private": true,
-	"version": "0.0.0",
+	"version": "1.0.0",
 	"type": "module",
-	"main": "dist/electron/main/main.js",
+	"main": "dist/electron/main.js",
 	"scripts": {
 		"vite:dev": "vite",
 		"vite:build": "vue-tsc --noEmit && vite build",
@@ -17,7 +17,6 @@
 	},
 	"build": {
 		"appId": "com.seal.electron.autoclicker",
-		"asar": true,
 		"directories": {
 			"buildResources": "assets",
 			"output": "release/${version}"
@@ -27,8 +26,13 @@
 			"native/index.node"
 		],
 		"win": {
+			"target": [
+				"7z",
+				"nsis"
+			],
 			"artifactName": "${productName}_${version}.${ext}"
-		}
+		},
+		"publish": null
 	},
 	"dependencies": {
 		"vue": "^3.4.29"

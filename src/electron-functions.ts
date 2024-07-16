@@ -5,6 +5,6 @@ interface Window {
 		setButton: (button: string) => void;
 		setInterval: (interval: string) => Promise<boolean>;
 		setDuration: (duration: string) => Promise<boolean>;
-		setHotkey: (hotkey: string, set: boolean) => void;
+		setHotkey: (hotkey: string, set: boolean) => Promise<boolean>;
 	};
 }

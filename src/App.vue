@@ -37,15 +37,18 @@ async function updateButton() {
 	window.api.setButton(buttonRef.value);
 }
 
-function toggleHotkey() {
+async function toggleHotkey() {
+	let success = false;
 	if (hotkeySet) {
-		window.api.setHotkey(hotkeyRef.value, false);
+		success = await window.api.setHotkey(hotkeyRef.value, false);
 	} else {
-		window.api.setHotkey(hotkeyRef.value, true);
+		success = await window.api.setHotkey(hotkeyRef.value, true);
 	}
-	hotkeySet = !hotkeySet;
-	hotkeyElmRef.value.disabled = hotkeySet;
-	loadSettingsBtnRef.value.disabled = hotkeySet;
+	if (success) {
+		hotkeySet = !hotkeySet;
+		hotkeyElmRef.value.disabled = hotkeySet;
+		loadSettingsBtnRef.value.disabled = hotkeySet;
+	}
 }
 
 async function saveSettings() {

@@ -4,20 +4,10 @@ const { contextBridge, ipcRenderer, globalShortcut } = require("electron");
 
 contextBridge.exposeInMainWorld("api", {
 	setButton: (button: string) => ipcRenderer.send("set-button", button),
-	setInterval: (interval: string) => {
-		ipcRenderer.send("set-interval", interval);
-		return new Promise((r) => ipcRenderer.once("set-interval-return", (_, v) => r(v)));
-	},
-	setDuration: (duration: string) => {
-		ipcRenderer.send("set-duration", duration);
-		return new Promise((r) => ipcRenderer.once("set-duration-return", (_, v) => r(v)));
-	},
-	setHotkey: (hotkey: string, set: boolean) => {
-		ipcRenderer.send("set-hotkey", hotkey, set);
-	},
-	toggle: () => {
-		ipcRenderer.send("toggle");
-	},
+	setInterval: (interval: string) => ipcRenderer.invoke("set-interval", interval),
+	setDuration: (duration: string) => ipcRenderer.invoke("set-duration", duration),
+	setHotkey: (hotkey: string, set: boolean) => ipcRenderer.invoke("set-hotkey", hotkey, set),
+	toggle: () => ipcRenderer.send("toggle"),
 });
 
 // It has the same sandbox as a Chrome extension.
